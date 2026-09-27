@@ -1,0 +1,124 @@
+import argparse
+import csv
+import json
+import random
+import statistics
+from collections import defaultdict
+from pathlib import Path
+
+
+FIELDS = ("timestamp", "source", "destination", "label")
+
+
+def simulate(seed: int = 7, groups: int = 20, samples: int = 12) -> list[dict]:
+    rng = random.Random(seed)
+    rows = []
+    for group in range(groups):
+        label = "beacon" if group % 2 == 0 else "benign"
+        timestamp = float(group * 10000)
+        for _ in range(samples):
+            if label == "beacon":
+                timestamp += 30 + rng.uniform(-12, 12) if group % 5 == 0 else 30 + rng.uniform(-2, 2)
+            else:
+                timestamp += 30 + rng.uniform(-8, 8) if group % 5 == 1 else rng.expovariate(1 / 30)
+            rows.append({"timestamp": round(timestamp, 3), "source": f"host-{group:02d}",
+                         "destination": "example.test:443", "label": label})
+    return rows
+
+
+def read_csv(path: str) -> list[dict]:
+    with open(path, newline="", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh)
+        if not set(FIELDS) <= set(reader.fieldnames or []):
+            raise ValueError(f"CSV 必须包含列：{', '.join(FIELDS)}")
+        rows = []
+        for row in reader:
+            timestamp = float(row["timestamp"])
+            if row["label"] not in ("beacon", "benign"):
+                raise ValueError("label 只能为 beacon 或 benign")
+            rows.append({**row, "timestamp": timestamp})
+        return rows
+
+
+def features(rows: list[dict], min_events: int = 6) -> list[dict]:
+    groups = defaultdict(list)
+    labels = defaultdict(set)
+    for row in rows:
+        key = (row["source"], row["destination"])
+        groups[key].append(float(row["timestamp"]))
+        labels[key].add(row["label"])
+    result = []
+    for key in sorted(groups):
+        if len(labels[key]) != 1:
+            raise ValueError(f"同一实体对存在冲突标签：{key}")
+        times = sorted(groups[key])
+        if len(times) < min_events:
+            continue
+        intervals = [b - a for a, b in zip(times, times[1:]) if b > a]
+        if len(intervals) < min_events - 1:
+            continue
+        mean = statistics.mean(intervals)
+        result.append({"source": key[0], "destination": key[1], "label": next(iter(labels[key])),
+                       "events": len(times), "mean_interval": round(mean, 4),
+                       "cv": round(statistics.pstdev(intervals) / mean, 6),
+                       "first_timestamp": times[0], "last_timestamp": times[-1]})
+    return result
+
+
+def sweep(records: list[dict], thresholds: list[float]) -> list[dict]:
+    results = []
+    for threshold in thresholds:
+        tp = fp = tn = fn = 0
+        for row in records:
+            predicted = row["cv"] <= threshold
+            positive = row["label"] == "beacon"
+            if predicted and positive: tp += 1
+            elif predicted: fp += 1
+            elif positive: fn += 1
+            else: tn += 1
+        results.append({"threshold": threshold, "tp": tp, "fp": fp, "tn": tn, "fn": fn,
+                        "precision": round(tp / (tp + fp), 4) if tp + fp else None,
+                        "recall": round(tp / (tp + fn), 4) if tp + fn else None,
+                        "false_positive_rate": round(fp / (fp + tn), 4) if fp + tn else None})
+    return results
+
+
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description="周期外联检测阈值实验，不访问网络")
+    sub = parser.add_subparsers(dest="action", required=True)
+    sim = sub.add_parser("simulate", help="生成可复现的标注合成 CSV")
+    sim.add_argument("--seed", type=int, default=7)
+    sim.add_argument("--groups", type=int, default=20)
+    sim.add_argument("--output", default="demo.csv")
+    ev = sub.add_parser("evaluate", help="按实体对计算 CV 并扫阈值")
+    ev.add_argument("csv")
+    ev.add_argument("--thresholds", default="0.05,0.1,0.2,0.3,0.5")
+    ev.add_argument("--min-events", type=int, default=6)
+    ev.add_argument("--output", help="JSON 报告路径；不填则打印到 stdout")
+    args = parser.parse_args(argv)
+    if args.action == "simulate":
+        if args.groups < 2: parser.error("--groups 至少为 2")
+        with open(args.output, "w", newline="", encoding="utf-8") as fh:
+            writer = csv.DictWriter(fh, fieldnames=FIELDS)
+            writer.writeheader()
+            writer.writerows(simulate(args.seed, args.groups))
+        print(f"已写入 {args.output}；随机种子 {args.seed}")
+        return 0
+    try:
+        thresholds = [float(x) for x in args.thresholds.split(",")]
+        if not thresholds or any(not 0 <= x <= 2 for x in thresholds) or args.min_events < 3:
+            raise ValueError("阈值须在 0..2 之间，min-events 至少为 3")
+        records = features(read_csv(args.csv), args.min_events)
+    except (ValueError, OSError) as exc:
+        parser.error(str(exc))
+    report = {"schema": "lr-detection-lab/v1", "dataset": Path(args.csv).name,
+              "evaluated_groups": len(records), "excluded_note": "少于 min-events 或非正间隔的组不参与评估",
+              "sweep": sweep(records, thresholds), "evidence": records}
+    result = json.dumps(report, ensure_ascii=False, indent=2)
+    if args.output: Path(args.output).write_text(result + "\n", encoding="utf-8")
+    else: print(result)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
