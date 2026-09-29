@@ -1,5 +1,5 @@
 import unittest
-from detection_lab.cli import features, pareto_frontier, simulate, sweep
+from detection_lab.cli import features, pareto_frontier, replicate, simulate, sweep
 
 
 class DetectionTests(unittest.TestCase):
@@ -38,6 +38,15 @@ class DetectionTests(unittest.TestCase):
             [x["threshold"] for x in pareto_frontier(points)],
             [0.1, 0.3],
         )
+
+    def test_replicate_aggregates_multiple_seeds(self):
+        report = replicate([1, 2, 3], 20, 12, [0.1, 0.2])
+        self.assertEqual(report["schema"], "lr-detection-lab-replicate/v1")
+        self.assertEqual(len(report["runs"]), 3)
+        self.assertEqual(len(report["aggregate"]), 2)
+        self.assertEqual(report["aggregate"][0]["runs"], 3)
+        self.assertIn("mean", report["aggregate"][0]["recall"])
+        self.assertIn("pstdev", report["aggregate"][0]["recall"])
 
     def test_conflicting_labels_fail(self):
         rows = [{"source": "a", "destination": "b", "timestamp": i, "label": "beacon" if i == 0 else "benign"} for i in range(8)]
