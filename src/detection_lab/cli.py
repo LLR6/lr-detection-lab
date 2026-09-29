@@ -141,6 +141,7 @@ def main(argv=None) -> int:
     sim = sub.add_parser("simulate", help="生成可复现的标注合成 CSV")
     sim.add_argument("--seed", type=int, default=7)
     sim.add_argument("--groups", type=int, default=20)
+    sim.add_argument("--samples", type=int, default=12, help="events per synthetic entity pair")
     sim.add_argument("--output", default="demo.csv")
     ev = sub.add_parser("evaluate", help="按实体对计算 CV 并扫阈值")
     ev.add_argument("csv")
@@ -150,10 +151,11 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     if args.action == "simulate":
         if args.groups < 2: parser.error("--groups 至少为 2")
+        if args.samples < 3: parser.error("--samples 至少为 3")
         with open(args.output, "w", newline="", encoding="utf-8") as fh:
             writer = csv.DictWriter(fh, fieldnames=FIELDS)
             writer.writeheader()
-            writer.writerows(simulate(args.seed, args.groups))
+            writer.writerows(simulate(args.seed, args.groups, args.samples))
         print(f"已写入 {args.output}；随机种子 {args.seed}")
         return 0
     try:
