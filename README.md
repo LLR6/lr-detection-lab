@@ -109,6 +109,25 @@ detection-lab evaluate demo.csv --thresholds 0.05,0.1,0.2,0.3,0.5 --output repor
 
 作者：LLR6 · MIT License
 
+<!-- LR-CONTENT-UPGRADE:START -->
+## v0.2：从“扫阈值”到“比较阈值”
+
+报告现在除 TP / FP / TN / FN、Precision、Recall、FPR 外，还输出：
+
+- Specificity
+- F1
+- Balanced Accuracy
+- Youden's J
+- Recall–FPR Pareto Frontier
+
+`pareto_frontier` 只保留没有被其他阈值同时在 Recall 与 FPR 上支配的候选点。
+
+这不是“自动选最佳阈值”。真实环境里误报成本和漏报成本不同，业务能够承受的调查量也不同，所以工具只负责把取舍透明化。
+
+完整解释见 [docs/METRICS.md](docs/METRICS.md)。
+
+<!-- LR-CONTENT-UPGRADE:END -->
+
 <!-- LR-RELATED:START -->
 ### Related LR Lab projects
 - [NightWatch](https://github.com/LLR6/Cybersecurity-Detection-Engineering-Android-Automation-Learning-by-Building) — apply explainable detection rules to event streams.
