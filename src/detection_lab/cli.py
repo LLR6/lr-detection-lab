@@ -135,6 +135,44 @@ def pareto_frontier(points: list[dict]) -> list[dict]:
     return sorted(frontier, key=lambda x: (x["false_positive_rate"], -x["recall"], x["threshold"]))
 
 
+def replicate(seeds: list[int], groups: int, samples: int, thresholds: list[float], min_events: int = 6) -> dict:
+    runs = []
+    by_threshold = defaultdict(list)
+    for seed in seeds:
+        records = features(simulate(seed, groups, samples), min_events)
+        result = sweep(records, thresholds)
+        runs.append({"seed": seed, "evaluated_groups": len(records), "sweep": result})
+        for row in result:
+            by_threshold[row["threshold"]].append(row)
+
+    aggregate = []
+    metric_names = ("precision", "recall", "false_positive_rate", "specificity", "f1", "balanced_accuracy", "youden_j")
+    for threshold in thresholds:
+        rows = by_threshold[threshold]
+        summary = {"threshold": threshold, "runs": len(rows)}
+        for metric in metric_names:
+            values = [row[metric] for row in rows if row.get(metric) is not None]
+            summary[metric] = {
+                "mean": round(statistics.mean(values), 4) if values else None,
+                "pstdev": round(statistics.pstdev(values), 4) if values else None,
+                "min": min(values) if values else None,
+                "max": max(values) if values else None,
+            }
+        aggregate.append(summary)
+
+    return {
+        "schema": "lr-detection-lab-replicate/v1",
+        "seeds": seeds,
+        "groups": groups,
+        "samples": samples,
+        "min_events": min_events,
+        "thresholds": thresholds,
+        "aggregate": aggregate,
+        "runs": runs,
+        "note": "Synthetic repeated-run stability report; not a production-network performance claim.",
+    }
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="周期外联检测阈值实验，不访问网络")
     sub = parser.add_subparsers(dest="action", required=True)
@@ -148,6 +186,13 @@ def main(argv=None) -> int:
     ev.add_argument("--thresholds", default="0.05,0.1,0.2,0.3,0.5")
     ev.add_argument("--min-events", type=int, default=6)
     ev.add_argument("--output", help="JSON 报告路径；不填则打印到 stdout")
+    rp = sub.add_parser("replicate", help="跨多个随机种子重复合成实验并统计稳定性")
+    rp.add_argument("--seeds", default="1,2,3,4,5")
+    rp.add_argument("--groups", type=int, default=20)
+    rp.add_argument("--samples", type=int, default=12)
+    rp.add_argument("--thresholds", default="0.05,0.1,0.2,0.3,0.5")
+    rp.add_argument("--min-events", type=int, default=6)
+    rp.add_argument("--output")
     args = parser.parse_args(argv)
     if args.action == "simulate":
         if args.groups < 2: parser.error("--groups 至少为 2")
@@ -157,6 +202,23 @@ def main(argv=None) -> int:
             writer.writeheader()
             writer.writerows(simulate(args.seed, args.groups, args.samples))
         print(f"已写入 {args.output}；随机种子 {args.seed}")
+        return 0
+    if args.action == "replicate":
+        try:
+            seeds = [int(x) for x in args.seeds.split(",")]
+            thresholds = [float(x) for x in args.thresholds.split(",")]
+            if not seeds or len(set(seeds)) != len(seeds):
+                raise ValueError("seeds 不能为空且不能重复")
+            if args.groups < 2 or args.samples < 3 or args.min_events < 3:
+                raise ValueError("groups 至少 2，samples/min-events 至少 3")
+            if not thresholds or any(not 0 <= x <= 2 for x in thresholds):
+                raise ValueError("阈值须在 0..2 之间")
+            report = replicate(seeds, args.groups, args.samples, thresholds, args.min_events)
+        except ValueError as exc:
+            parser.error(str(exc))
+        result = json.dumps(report, ensure_ascii=False, indent=2)
+        if args.output: Path(args.output).write_text(result + "\n", encoding="utf-8")
+        else: print(result)
         return 0
     try:
         thresholds = [float(x) for x in args.thresholds.split(",")]
