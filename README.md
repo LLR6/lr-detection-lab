@@ -6,7 +6,36 @@
 <p align="center"><strong>规则很容易写，阈值的代价要拿误报和漏报一起看。</strong></p>
 <p align="center">生成带标签的合成时间序列，扫 CV 阈值，输出混淆矩阵和逐组证据。</p>
 <p align="center"><a href="#30-秒看懂">30 秒看懂</a> · <a href="#5-分钟开始">5 分钟开始</a> · <a href="#能力与边界">能力与边界</a></p>
-<p align="center"><img alt="Test" src="https://github.com/LLR6/lr-detection-lab/actions/workflows/test.yml/badge.svg"> <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue"> <img alt="MIT" src="https://img.shields.io/badge/license-MIT-green"> <img alt="Version 0.1.0" src="https://img.shields.io/badge/version-0.1.0-8b5cf6"></p>
+<p align="center"><img alt="Test" src="https://github.com/LLR6/lr-detection-lab/actions/workflows/test.yml/badge.svg"> <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue"> <img alt="MIT" src="https://img.shields.io/badge/license-MIT-green"> <img alt="Version 0.1.0" src="https://img.shields.io/badge/version-0.1.0-8b5cf6"> <a href="https://github.com/LLR6/lr-detection-lab/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/LLR6/lr-detection-lab?style=flat&logo=github"></a></p>
+
+
+> **Reproducible blue-team lab for beacon-detection threshold tuning.**  
+> Generate labeled synthetic traffic, sweep coefficient-of-variation thresholds, and inspect the exact TP / FP / TN / FN trade-off behind every decision.
+
+### Why this repo exists
+
+很多检测规则并不是“有没有规则”的问题，而是**阈值放在哪里**的问题。这个仓库把阈值调优拆成一个很小、可复现、能解释的实验：
+
+```text
+labeled synthetic traffic
+        ↓
+group by src/dst
+        ↓
+interval CV
+        ↓
+threshold sweep
+        ↓
+precision / recall / FPR + per-flow evidence
+```
+
+适合拿来做三件事：**Blue Team / Detection Engineering 入门实验、阈值敏感性分析、误报案例复盘**。
+
+### One-minute result
+
+在固定 seed 的示例数据上，同一个检测逻辑只改变阈值，就会出现明显不同的误报/漏报组合。仓库不会把某个阈值包装成“最佳答案”，而是把代价完整展示出来，让你自己决定业务上能接受什么。
+
+如果你也在研究 detection engineering、beacon detection 或规则调优，可以 ⭐ 收藏，后续会继续加入时间窗口、类别不平衡与更多可复现实验。
+
 
 ## 30 秒看懂
 
