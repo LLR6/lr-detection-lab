@@ -135,6 +135,14 @@ detection-lab evaluate demo.csv --thresholds 0.05,0.1,0.2,0.3,0.5 --output repor
 - [LR-SOC-Copilot](https://github.com/LLR6/LR-SOC-Copilot) — correlate alerts into evidence-backed cases.
 <!-- LR-RELATED:END -->
 
+<!-- LR-ENGINEERING-REF:START -->
+## Engineering Reference
+
+[Architecture](docs/ARCHITECTURE.md) · [Metrics](docs/METRICS.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Release checklist](docs/RELEASE_CHECKLIST.md) · [Replicate schema](schemas/replicate-report.schema.json)
+
+These files document the project's architecture, safety boundaries, reproducibility assumptions and release process.
+<!-- LR-ENGINEERING-REF:END -->
+
 <!-- LR-LAB-FOOTER:START -->
 ---
 <p align="center"><sub>Part of <a href="https://github.com/LLR6">LR Lab</a> · Security × AI × Android × Automation</sub><br><sub>Build things that are useful, inspectable, and reproducible.</sub></p>
