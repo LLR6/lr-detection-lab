@@ -76,11 +76,63 @@ def sweep(records: list[dict], thresholds: list[float]) -> list[dict]:
             elif predicted: fp += 1
             elif positive: fn += 1
             else: tn += 1
-        results.append({"threshold": threshold, "tp": tp, "fp": fp, "tn": tn, "fn": fn,
-                        "precision": round(tp / (tp + fp), 4) if tp + fp else None,
-                        "recall": round(tp / (tp + fn), 4) if tp + fn else None,
-                        "false_positive_rate": round(fp / (fp + tn), 4) if fp + tn else None})
+        precision = tp / (tp + fp) if tp + fp else None
+        recall = tp / (tp + fn) if tp + fn else None
+        false_positive_rate = fp / (fp + tn) if fp + tn else None
+        specificity = tn / (tn + fp) if tn + fp else None
+        f1 = (
+            2 * precision * recall / (precision + recall)
+            if precision is not None and recall is not None and precision + recall
+            else None
+        )
+        balanced_accuracy = (
+            (recall + specificity) / 2
+            if recall is not None and specificity is not None
+            else None
+        )
+        youden_j = (
+            recall - false_positive_rate
+            if recall is not None and false_positive_rate is not None
+            else None
+        )
+        results.append({
+            "threshold": threshold,
+            "tp": tp,
+            "fp": fp,
+            "tn": tn,
+            "fn": fn,
+            "precision": round(precision, 4) if precision is not None else None,
+            "recall": round(recall, 4) if recall is not None else None,
+            "false_positive_rate": round(false_positive_rate, 4) if false_positive_rate is not None else None,
+            "specificity": round(specificity, 4) if specificity is not None else None,
+            "f1": round(f1, 4) if f1 is not None else None,
+            "balanced_accuracy": round(balanced_accuracy, 4) if balanced_accuracy is not None else None,
+            "youden_j": round(youden_j, 4) if youden_j is not None else None,
+        })
     return results
+
+
+def pareto_frontier(points: list[dict]) -> list[dict]:
+    """Return thresholds not dominated on recall (higher) and FPR (lower)."""
+    usable = [
+        p for p in points
+        if p.get("recall") is not None and p.get("false_positive_rate") is not None
+    ]
+    frontier = []
+    for point in usable:
+        dominated = any(
+            other is not point
+            and other["recall"] >= point["recall"]
+            and other["false_positive_rate"] <= point["false_positive_rate"]
+            and (
+                other["recall"] > point["recall"]
+                or other["false_positive_rate"] < point["false_positive_rate"]
+            )
+            for other in usable
+        )
+        if not dominated:
+            frontier.append(point)
+    return sorted(frontier, key=lambda x: (x["false_positive_rate"], -x["recall"], x["threshold"]))
 
 
 def main(argv=None) -> int:
@@ -111,9 +163,17 @@ def main(argv=None) -> int:
         records = features(read_csv(args.csv), args.min_events)
     except (ValueError, OSError) as exc:
         parser.error(str(exc))
-    report = {"schema": "lr-detection-lab/v1", "dataset": Path(args.csv).name,
-              "evaluated_groups": len(records), "excluded_note": "少于 min-events 或非正间隔的组不参与评估",
-              "sweep": sweep(records, thresholds), "evidence": records}
+    sweep_result = sweep(records, thresholds)
+    report = {
+        "schema": "lr-detection-lab/v2",
+        "dataset": Path(args.csv).name,
+        "evaluated_groups": len(records),
+        "excluded_note": "少于 min-events 或非正间隔的组不参与评估",
+        "sweep": sweep_result,
+        "pareto_frontier": pareto_frontier(sweep_result),
+        "metric_note": "Pareto frontier maximizes recall while minimizing false-positive rate; it is not an automatic best-threshold recommendation.",
+        "evidence": records,
+    }
     result = json.dumps(report, ensure_ascii=False, indent=2)
     if args.output: Path(args.output).write_text(result + "\n", encoding="utf-8")
     else: print(result)
