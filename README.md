@@ -11,6 +11,10 @@
 <p align="center"><a href="https://github.com/LLR6">Profile</a> · <a href="https://github.com/LLR6?tab=repositories">All projects</a> · <a href="https://github.com/LLR6/lr-detection-lab/issues">Issues</a></p>
 <!-- LR-LAB-CHROME:END -->
 
+<!-- LR-FAMILY-NAV:START -->
+<p align="center"><a href="#30-秒试玩">1-minute demo</a> · <a href="#one-minute-result">Result</a> · <a href="./src">Source</a> · <a href="./tests">Tests</a></p>
+<!-- LR-FAMILY-NAV:END -->
+
 
 <p align="center"><img src="./docs/media/social-preview.svg" alt="Detection Threshold Lab — See what a threshold really costs" width="100%"></p>
 <p align="center"><img src="./docs/media/cli-demo.gif" alt="真实示例：扫描阈值并观察误报和漏报变化" width="100%"></p>
@@ -104,6 +108,13 @@ detection-lab evaluate demo.csv --thresholds 0.05,0.1,0.2,0.3,0.5 --output repor
 欢迎提交**去敏且有标注**的数据生成思路或误报案例。下一步可试时间窗口、其他抖动分布、标签不平衡及与 NightWatch 的规则对照。验证代码：`python -m unittest discover -s tests`。
 
 作者：LLR6 · MIT License
+
+<!-- LR-RELATED:START -->
+### Related LR Lab projects
+- [NightWatch](https://github.com/LLR6/Cybersecurity-Detection-Engineering-Android-Automation-Learning-by-Building) — apply explainable detection rules to event streams.
+- [Detector Resilience Lab](https://github.com/LLR6/LR-Detector-Resilience-Lab) — study how defensive models degrade under feature drift.
+- [LR-SOC-Copilot](https://github.com/LLR6/LR-SOC-Copilot) — correlate alerts into evidence-backed cases.
+<!-- LR-RELATED:END -->
 
 <!-- LR-LAB-FOOTER:START -->
 ---
