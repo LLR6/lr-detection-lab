@@ -140,3 +140,27 @@ detection-lab evaluate demo.csv --thresholds 0.05,0.1,0.2,0.3,0.5 --output repor
 <p align="center"><sub>Part of <a href="https://github.com/LLR6">LR Lab</a> · Security × AI × Android × Automation</sub><br><sub>Build things that are useful, inspectable, and reproducible.</sub></p>
 <!-- LR-LAB-FOOTER:END -->
 
+<!-- LR-DEEP-CONTENT-3:START -->
+## Multi-seed replicate
+
+单个随机种子容易让结果看起来比实际更稳定。现在可以直接重复多组合成实验：
+
+```bash
+detection-lab replicate \
+  --seeds 1,2,3,4,5 \
+  --groups 20 \
+  --samples 12 \
+  --thresholds 0.05,0.1,0.2,0.3,0.5 \
+  --output replicate-report.json
+```
+
+对每个阈值，报告会聚合 Precision、Recall、FPR、Specificity、F1、Balanced Accuracy 和 Youden's J，并记录：
+
+- mean
+- population standard deviation
+- min
+- max
+
+CI 会固定运行 5 个 seed 并上传报告。这个结果仍然只代表当前合成数据生成器的稳定性，不应被包装成真实网络准确率。
+<!-- LR-DEEP-CONTENT-3:END -->
+
