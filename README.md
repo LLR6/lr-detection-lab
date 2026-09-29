@@ -1,5 +1,17 @@
 # Detection Threshold Lab
 
+<!-- LR-LAB-CHROME:START -->
+<p align="center">
+  <a href="https://github.com/LLR6"><img alt="LR Lab" src="https://img.shields.io/badge/LR_LAB-0x4C52-0D1117?style=for-the-badge&logo=github&logoColor=white"></a>
+  <img alt="BLUE TEAM LAB" src="https://img.shields.io/badge/BLUE_TEAM_LAB-14B8A6?style=for-the-badge">
+</p>
+<p align="center"><strong>See what a threshold really costs.</strong><br><sub>Reproducible beacon-detection threshold experiments</sub></p>
+<p align="center"><a href="https://github.com/LLR6/lr-detection-lab/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/LLR6/lr-detection-lab?style=flat-square&logo=github&label=stars"></a>
+  <img alt="Last commit" src="https://img.shields.io/github/last-commit/LLR6/lr-detection-lab?style=flat-square"> <img alt="Maintained" src="https://img.shields.io/badge/status-active-success?style=flat-square"></p>
+<p align="center"><a href="https://github.com/LLR6">Profile</a> · <a href="https://github.com/LLR6?tab=repositories">All projects</a> · <a href="https://github.com/LLR6/lr-detection-lab/issues">Issues</a></p>
+<!-- LR-LAB-CHROME:END -->
+
+
 <p align="center"><img src="./docs/media/social-preview.svg" alt="Detection Threshold Lab — See what a threshold really costs" width="100%"></p>
 <p align="center"><img src="./docs/media/cli-demo.gif" alt="真实示例：扫描阈值并观察误报和漏报变化" width="100%"></p>
 <p align="center"><sub>使用 seed 7、20 组模拟流量的可复现输出；合成数据不是现实环境的效果评估。</sub></p>
@@ -92,3 +104,9 @@ detection-lab evaluate demo.csv --thresholds 0.05,0.1,0.2,0.3,0.5 --output repor
 欢迎提交**去敏且有标注**的数据生成思路或误报案例。下一步可试时间窗口、其他抖动分布、标签不平衡及与 NightWatch 的规则对照。验证代码：`python -m unittest discover -s tests`。
 
 作者：LLR6 · MIT License
+
+<!-- LR-LAB-FOOTER:START -->
+---
+<p align="center"><sub>Part of <a href="https://github.com/LLR6">LR Lab</a> · Security × AI × Android × Automation</sub><br><sub>Build things that are useful, inspectable, and reproducible.</sub></p>
+<!-- LR-LAB-FOOTER:END -->
+
