@@ -5,6 +5,14 @@ import random
 import statistics
 from collections import defaultdict
 from pathlib import Path
+from importlib.metadata import PackageNotFoundError, version
+
+def package_version():
+    try:
+        return version("lr-detection-lab")
+    except PackageNotFoundError:
+        return "dev"
+
 
 
 FIELDS = ("timestamp", "source", "destination", "label")
@@ -175,6 +183,7 @@ def replicate(seeds: list[int], groups: int, samples: int, thresholds: list[floa
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="周期外联检测阈值实验，不访问网络")
+    parser.add_argument("--version", action="version", version=f"%(prog)s {package_version()}")
     sub = parser.add_subparsers(dest="action", required=True)
     sim = sub.add_parser("simulate", help="生成可复现的标注合成 CSV")
     sim.add_argument("--seed", type=int, default=7)
