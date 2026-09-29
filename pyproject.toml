@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lr-detection-lab"
-version = "0.1.0"
+version = "0.2.0"
 description = "Reproducible beacon interval threshold experiments with evidence and false-positive counts"
 readme = "README.md"
 requires-python = ">=3.10"
