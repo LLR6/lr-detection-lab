@@ -6,10 +6,18 @@ build-backend = "setuptools.build_meta"
 name = "lr-detection-lab"
 version = "0.1.0"
 description = "Reproducible beacon interval threshold experiments with evidence and false-positive counts"
+readme = "README.md"
 requires-python = ">=3.10"
+authors = [{name = "LLR6"}]
+keywords = ["security", "blue-team", "detection-engineering", "benchmark", "reproducibility"]
 
 [project.scripts]
 detection-lab = "detection_lab.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/LLR6/lr-detection-lab"
+Repository = "https://github.com/LLR6/lr-detection-lab"
+Issues = "https://github.com/LLR6/lr-detection-lab/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
