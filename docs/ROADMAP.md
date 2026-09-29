@@ -1,20 +1,31 @@
 # Roadmap
 
-## Near term
+## Current foundation
 
-- Confidence intervals over repeated seeds.
-- Additional synthetic regimes with different jitter distributions.
-- Class-imbalance experiments.
-- Export compact CSV summaries for plotting.
+- Seeded synthetic beacon / benign traffic
+- Interval-CV feature extraction
+- Threshold sweep
+- Precision / Recall / FPR / Specificity / F1
+- Balanced Accuracy / Youden's J
+- Pareto frontier
+- Multi-seed replicate stability reports
 
-## Medium term
+## Next
 
-- Time-split evaluation on de-identified labeled datasets.
-- Threshold stability under changing benign traffic distributions.
-- Cost-sensitive evaluation with configurable false-positive / false-negative costs.
+- bootstrap confidence intervals;
+- configurable benign timing distributions;
+- class-imbalance experiments;
+- threshold selection under explicit FP/FN costs;
+- CSV export for plotting outside the tool.
 
-## Research questions
+## Later
 
-- Which metrics remain stable under class imbalance?
-- How sensitive are chosen thresholds to benign workload changes?
-- When does a Pareto frontier materially narrow the decision space?
+- multiple simple periodicity features;
+- train/test time splits;
+- calibration-drift experiments;
+- comparison with simple spectral baselines.
+
+## Non-goals
+
+- publishing synthetic metrics as production-network accuracy;
+- auto-selecting one universal “best” threshold.
