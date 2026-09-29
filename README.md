@@ -11,6 +11,11 @@
 <p align="center"><a href="https://github.com/LLR6">Profile</a> · <a href="https://github.com/LLR6?tab=repositories">All projects</a> · <a href="https://github.com/LLR6/lr-detection-lab/issues">Issues</a></p>
 <!-- LR-LAB-CHROME:END -->
 
+<!-- LR-PROJECT-DOCS:START -->
+### Project docs
+[Architecture](./docs/ARCHITECTURE.md) · [Benchmarks](./docs/BENCHMARKS.md) · [Metrics](./docs/METRICS.md) · [Roadmap](./docs/ROADMAP.md) · [Releasing](./docs/RELEASING.md) · [Security](./SECURITY.md)
+<!-- LR-PROJECT-DOCS:END -->
+
 <!-- LR-FAMILY-NAV:START -->
 <p align="center"><a href="#30-秒试玩">1-minute demo</a> · <a href="#one-minute-result">Result</a> · <a href="./src">Source</a> · <a href="./tests">Tests</a></p>
 <!-- LR-FAMILY-NAV:END -->
