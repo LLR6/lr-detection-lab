@@ -1,0 +1,339 @@
+{
+  "schema": "lr-detection-lab/v2",
+  "dataset": "demo.csv",
+  "evaluated_groups": 20,
+  "excluded_note": "少于 min-events 或非正间隔的组不参与评估",
+  "sweep": [
+    {
+      "threshold": 0.05,
+      "tp": 8,
+      "fp": 0,
+      "tn": 10,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.8,
+      "false_positive_rate": 0.0,
+      "specificity": 1.0,
+      "f1": 0.8889,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    },
+    {
+      "threshold": 0.1,
+      "tp": 8,
+      "fp": 0,
+      "tn": 10,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.8,
+      "false_positive_rate": 0.0,
+      "specificity": 1.0,
+      "f1": 0.8889,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    },
+    {
+      "threshold": 0.2,
+      "tp": 9,
+      "fp": 2,
+      "tn": 8,
+      "fn": 1,
+      "precision": 0.8182,
+      "recall": 0.9,
+      "false_positive_rate": 0.2,
+      "specificity": 0.8,
+      "f1": 0.8571,
+      "balanced_accuracy": 0.85,
+      "youden_j": 0.7
+    },
+    {
+      "threshold": 0.3,
+      "tp": 10,
+      "fp": 2,
+      "tn": 8,
+      "fn": 0,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "false_positive_rate": 0.2,
+      "specificity": 0.8,
+      "f1": 0.9091,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    },
+    {
+      "threshold": 0.5,
+      "tp": 10,
+      "fp": 2,
+      "tn": 8,
+      "fn": 0,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "false_positive_rate": 0.2,
+      "specificity": 0.8,
+      "f1": 0.9091,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    }
+  ],
+  "pareto_frontier": [
+    {
+      "threshold": 0.05,
+      "tp": 8,
+      "fp": 0,
+      "tn": 10,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.8,
+      "false_positive_rate": 0.0,
+      "specificity": 1.0,
+      "f1": 0.8889,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    },
+    {
+      "threshold": 0.1,
+      "tp": 8,
+      "fp": 0,
+      "tn": 10,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.8,
+      "false_positive_rate": 0.0,
+      "specificity": 1.0,
+      "f1": 0.8889,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    },
+    {
+      "threshold": 0.3,
+      "tp": 10,
+      "fp": 2,
+      "tn": 8,
+      "fn": 0,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "false_positive_rate": 0.2,
+      "specificity": 0.8,
+      "f1": 0.9091,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    },
+    {
+      "threshold": 0.5,
+      "tp": 10,
+      "fp": 2,
+      "tn": 8,
+      "fn": 0,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "false_positive_rate": 0.2,
+      "specificity": 0.8,
+      "f1": 0.9091,
+      "balanced_accuracy": 0.9,
+      "youden_j": 0.8
+    }
+  ],
+  "metric_note": "Pareto frontier maximizes recall while minimizing false-positive rate; it is not an automatic best-threshold recommendation.",
+  "evidence": [
+    {
+      "source": "host-00",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 24.4864,
+      "cv": 0.215667,
+      "first_timestamp": 25.772,
+      "last_timestamp": 295.122
+    },
+    {
+      "source": "host-01",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 30.5727,
+      "cv": 0.16916,
+      "first_timestamp": 10028.792,
+      "last_timestamp": 10365.092
+    },
+    {
+      "source": "host-02",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 29.4154,
+      "cv": 0.033454,
+      "first_timestamp": 20028.577,
+      "last_timestamp": 20352.146
+    },
+    {
+      "source": "host-03",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 25.9574,
+      "cv": 0.615565,
+      "first_timestamp": 30034.221,
+      "last_timestamp": 30319.752
+    },
+    {
+      "source": "host-04",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 29.9081,
+      "cv": 0.038796,
+      "first_timestamp": 40030.918,
+      "last_timestamp": 40359.907
+    },
+    {
+      "source": "host-05",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 31.8435,
+      "cv": 0.690176,
+      "first_timestamp": 50062.498,
+      "last_timestamp": 50412.777
+    },
+    {
+      "source": "host-06",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 29.7275,
+      "cv": 0.04325,
+      "first_timestamp": 60030.589,
+      "last_timestamp": 60357.591
+    },
+    {
+      "source": "host-07",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 30.0732,
+      "cv": 0.760784,
+      "first_timestamp": 70004.155,
+      "last_timestamp": 70334.96
+    },
+    {
+      "source": "host-08",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 29.5979,
+      "cv": 0.039353,
+      "first_timestamp": 80029.435,
+      "last_timestamp": 80355.012
+    },
+    {
+      "source": "host-09",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 42.0635,
+      "cv": 0.567744,
+      "first_timestamp": 90013.826,
+      "last_timestamp": 90476.525
+    },
+    {
+      "source": "host-10",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 22.7598,
+      "cv": 0.190552,
+      "first_timestamp": 100027.417,
+      "last_timestamp": 100277.775
+    },
+    {
+      "source": "host-11",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 29.207,
+      "cv": 0.173525,
+      "first_timestamp": 110023.623,
+      "last_timestamp": 110344.9
+    },
+    {
+      "source": "host-12",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 29.4249,
+      "cv": 0.040203,
+      "first_timestamp": 120029.864,
+      "last_timestamp": 120353.538
+    },
+    {
+      "source": "host-13",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 34.0649,
+      "cv": 0.915312,
+      "first_timestamp": 130023.503,
+      "last_timestamp": 130398.217
+    },
+    {
+      "source": "host-14",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 30.3146,
+      "cv": 0.040483,
+      "first_timestamp": 140029.319,
+      "last_timestamp": 140362.78
+    },
+    {
+      "source": "host-15",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 45.7832,
+      "cv": 0.954411,
+      "first_timestamp": 150000.85,
+      "last_timestamp": 150504.465
+    },
+    {
+      "source": "host-16",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 30.5232,
+      "cv": 0.03423,
+      "first_timestamp": 160028.787,
+      "last_timestamp": 160364.542
+    },
+    {
+      "source": "host-17",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 36.5776,
+      "cv": 0.885411,
+      "first_timestamp": 170041.606,
+      "last_timestamp": 170443.96
+    },
+    {
+      "source": "host-18",
+      "destination": "example.test:443",
+      "label": "beacon",
+      "events": 12,
+      "mean_interval": 30.0062,
+      "cv": 0.045176,
+      "first_timestamp": 180028.508,
+      "last_timestamp": 180358.576
+    },
+    {
+      "source": "host-19",
+      "destination": "example.test:443",
+      "label": "benign",
+      "events": 12,
+      "mean_interval": 29.7633,
+      "cv": 0.798757,
+      "first_timestamp": 190106.1,
+      "last_timestamp": 190433.496
+    }
+  ]
+}

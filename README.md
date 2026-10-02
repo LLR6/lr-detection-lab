@@ -1,26 +1,16 @@
 # Detection Threshold Lab
 
-<!-- LR-LAB-CHROME:START -->
-<p align="center">
-  <a href="https://github.com/LLR6"><img alt="LR Lab" src="https://img.shields.io/badge/LR_LAB-0x4C52-0D1117?style=for-the-badge&logo=github&logoColor=white"></a>
-  <img alt="BLUE TEAM LAB" src="https://img.shields.io/badge/BLUE_TEAM_LAB-14B8A6?style=for-the-badge">
-</p>
-<p align="center"><strong>See what a threshold really costs.</strong><br><sub>Reproducible beacon-detection threshold experiments</sub></p>
-<p align="center"><a href="https://github.com/LLR6/lr-detection-lab/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/LLR6/lr-detection-lab?style=flat-square&logo=github&label=stars"></a>
-  <img alt="Last commit" src="https://img.shields.io/github/last-commit/LLR6/lr-detection-lab?style=flat-square"> <img alt="Maintained" src="https://img.shields.io/badge/status-active-success?style=flat-square"></p>
-<p align="center"><a href="https://github.com/LLR6">Profile</a> · <a href="https://github.com/LLR6?tab=repositories">All projects</a> · <a href="https://github.com/LLR6/lr-detection-lab/issues">Issues</a></p>
-<!-- LR-LAB-CHROME:END -->
+### 阈值调高一点，究竟多抓到谁、又误报了谁？
 
-<!-- LR-PROJECT-DOCS:START -->
-### Project docs
-[Architecture](./docs/ARCHITECTURE.md) · [Benchmarks](./docs/BENCHMARKS.md) · [Metrics](./docs/METRICS.md) · [Roadmap](./docs/ROADMAP.md) · [Compatibility](./docs/COMPATIBILITY.md) · [Releasing](./docs/RELEASING.md) · [Security](./SECURITY.md) · [Support](./SUPPORT.md)
- · [Change risk](./docs/CHANGE_RISK.md) · [Failure modes](./docs/FAILURE_MODES.md)
-<!-- LR-PROJECT-DOCS:END -->
+用带标签的合成时间序列比较周期检测阈值，直接查看误报、漏报和每个实体对的间隔证据。适合检测工程入门、阈值敏感性实验和指标教学。
 
-<!-- LR-FAMILY-NAV:START -->
-<p align="center"><a href="#30-秒试玩">1-minute demo</a> · <a href="#one-minute-result">Result</a> · <a href="./src">Source</a> · <a href="./tests">Tests</a></p>
-<!-- LR-FAMILY-NAV:END -->
+[快速体验](#30-秒试玩) · [实跑案例](docs/DEMO.md) · [完整输出](examples/showcase/output.json) · [反馈问题](https://github.com/LLR6/lr-detection-lab/issues)
 
+| 你的场景 | 可以先试什么 |
+| --- | --- |
+| 想理解 Precision 与 Recall 的取舍 | 同一批样本扫描多个 CV 阈值 |
+| 某个随机种子的结果特别好 | 用 replicate 比较多个种子的均值与波动 |
+| 只看指标，解释不了具体判定 | 回查逐组事件数、时间范围和 CV |
 
 <p align="center"><img src="./docs/media/social-preview.svg" alt="Detection Threshold Lab — See what a threshold really costs" width="100%"></p>
 <p align="center"><img src="./docs/media/cli-demo.gif" alt="真实示例：扫描阈值并观察误报和漏报变化" width="100%"></p>
@@ -28,35 +18,7 @@
 <p align="center"><strong>规则很容易写，阈值的代价要拿误报和漏报一起看。</strong></p>
 <p align="center">生成带标签的合成时间序列，扫 CV 阈值，输出混淆矩阵和逐组证据。</p>
 <p align="center"><a href="#30-秒看懂">30 秒看懂</a> · <a href="#5-分钟开始">5 分钟开始</a> · <a href="#能力与边界">能力与边界</a></p>
-<p align="center"><img alt="Test" src="https://github.com/LLR6/lr-detection-lab/actions/workflows/test.yml/badge.svg"> <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue"> <img alt="MIT" src="https://img.shields.io/badge/license-MIT-green"> <img alt="Version 0.1.0" src="https://img.shields.io/badge/version-0.1.0-8b5cf6"> <a href="https://github.com/LLR6/lr-detection-lab/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/LLR6/lr-detection-lab?style=flat&logo=github"></a></p>
-
-
-> **Reproducible blue-team lab for beacon-detection threshold tuning.**  
-> Generate labeled synthetic traffic, sweep coefficient-of-variation thresholds, and inspect the exact TP / FP / TN / FN trade-off behind every decision.
-
-### Why this repo exists
-
-很多检测规则并不是“有没有规则”的问题，而是**阈值放在哪里**的问题。这个仓库把阈值调优拆成一个很小、可复现、能解释的实验：
-
-```text
-labeled synthetic traffic
-        ↓
-group by src/dst
-        ↓
-interval CV
-        ↓
-threshold sweep
-        ↓
-precision / recall / FPR + per-flow evidence
-```
-
-适合拿来做三件事：**Blue Team / Detection Engineering 入门实验、阈值敏感性分析、误报案例复盘**。
-
-### One-minute result
-
-在固定 seed 的示例数据上，同一个检测逻辑只改变阈值，就会出现明显不同的误报/漏报组合。仓库不会把某个阈值包装成“最佳答案”，而是把代价完整展示出来，让你自己决定业务上能接受什么。
-
-如果你也在研究 detection engineering、beacon detection 或规则调优，可以 ⭐ 收藏，后续会继续加入时间窗口、类别不平衡与更多可复现实验。
+<p align="center"><img alt="Test" src="https://github.com/LLR6/lr-detection-lab/actions/workflows/test.yml/badge.svg"> <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue"> <img alt="MIT" src="https://img.shields.io/badge/license-MIT-green">  <a href="https://github.com/LLR6/lr-detection-lab/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/LLR6/lr-detection-lab?style=flat&logo=github"></a></p>
 
 
 ## 30 秒看懂
@@ -109,6 +71,13 @@ detection-lab evaluate demo.csv --thresholds 0.05,0.1,0.2,0.3,0.5 --output repor
 
 合成样本只用于理解阈值取舍，不能证明现实网络下的最优阈值；低 CV 也不能单独证明 C2。真实使用需要合法采集、人工标注和对业务定时任务的单独核查。本工具不抓包、不扫描、不访问网络。
 
+
+## 实跑结果与使用案例
+
+本次 seed 7 的 **20 组合成样本**：阈值 0.05 时 TP=8 / FP=0 / FN=2；阈值 0.30 时 TP=10 / FP=2 / FN=0。多检出两组的同时多误报两组。完整报告包含指标、Pareto 候选与逐组证据；这些结果不是实际网络准确率。
+
+[查看运行过程与读结果的方法](docs/DEMO.md) · [查看未经改写的 JSON 输出](examples/showcase/output.json)
+
 ## 参与 / Help Wanted
 
 欢迎提交**去敏且有标注**的数据生成思路或误报案例。下一步可试时间窗口、其他抖动分布、标签不平衡及与 NightWatch 的规则对照。验证代码：`python -m unittest discover -s tests`。
@@ -141,19 +110,6 @@ detection-lab evaluate demo.csv --thresholds 0.05,0.1,0.2,0.3,0.5 --output repor
 - [LR-SOC-Copilot](https://github.com/LLR6/LR-SOC-Copilot) — correlate alerts into evidence-backed cases.
 <!-- LR-RELATED:END -->
 
-<!-- LR-ENGINEERING-REF:START -->
-## Engineering Reference
-
-[Architecture](docs/ARCHITECTURE.md) · [Metrics](docs/METRICS.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Release checklist](docs/RELEASE_CHECKLIST.md) · [Replicate schema](schemas/replicate-report.schema.json)
-
-These files document the project's architecture, safety boundaries, reproducibility assumptions and release process.
-<!-- LR-ENGINEERING-REF:END -->
-
-<!-- LR-LAB-FOOTER:START -->
----
-<p align="center"><sub>Part of <a href="https://github.com/LLR6">LR Lab</a> · Security × AI × Android × Automation</sub><br><sub>Build things that are useful, inspectable, and reproducible.</sub></p>
-<!-- LR-LAB-FOOTER:END -->
-
 <!-- LR-DEEP-CONTENT-3:START -->
 ## Multi-seed replicate
 
@@ -178,3 +134,13 @@ detection-lab replicate \
 CI 会固定运行 5 个 seed 并上传报告。这个结果仍然只代表当前合成数据生成器的稳定性，不应被包装成真实网络准确率。
 <!-- LR-DEEP-CONTENT-3:END -->
 
+
+<details>
+<summary>工程文档与兼容性</summary>
+
+[Architecture](./docs/ARCHITECTURE.md) · [Benchmarks](./docs/BENCHMARKS.md) · [Metrics](./docs/METRICS.md) · [Roadmap](./docs/ROADMAP.md) · [Compatibility](./docs/COMPATIBILITY.md) · [Releasing](./docs/RELEASING.md) · [Security](./SECURITY.md) · [Support](./SUPPORT.md)
+ · [Change risk](./docs/CHANGE_RISK.md) · [Failure modes](./docs/FAILURE_MODES.md)
+
+[贡献说明](CONTRIBUTING.md) · [版本记录](CHANGELOG.md) · [输出格式](schemas)
+
+</details>
